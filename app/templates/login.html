@@ -1,0 +1,17 @@
+<!-- extend from basse layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>'It's none of your business,' the young man said rudely. 'This is a private conversation!'</h1>
+<form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <p>Please enter your username and password: </p>
+    <p>username: {{form.username(size=16)}}</p>
+    <p>password: {{form.password(size=16)}}</p>
+    {% if form.username.errors or form.password.errors %}
+        <span style="color: red;">GlaDOS: "You are kidding me."</span> 
+    {% endif %}
+    <p>{{form.remember}} Remember Me</p>
+    <p><input type="submit" value="Sign In"></p>
+</form>
+{% endblock %}

@@ -1,0 +1,2 @@
+# logStream
+A simple blog
