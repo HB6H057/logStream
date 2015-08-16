@@ -1,8 +1,9 @@
-from app import db
+from app import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
+    __tablename__ == 'users'
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64))
     username = db.Column(db.String(64), index=True, unique=True)
@@ -23,3 +24,8 @@ class User(db.Model):
 
     def __repr__(self):
         "GlaDOS: \"(User: %s)That was genuinely mildly impressive.\""
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
