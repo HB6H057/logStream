@@ -18,9 +18,8 @@ class RegistrationForm(Form):
                                               'Username must have ony letters,\
                                               numbers, dotd or underscores')])
     password = PasswordField('password',
-                             validators=[DataRequired(),
-                                         EqualTo('password2',
-                                                  message='Password must match.')])
+                             validators=[DataRequired(), EqualTo('password2',
+                             message='Password must match.')])
     password2 = PasswordField('comfirm password', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Length(1, 64),
                                              Email()])
