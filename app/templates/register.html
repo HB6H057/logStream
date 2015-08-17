@@ -1,0 +1,29 @@
+<!--extend from base layout-->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Register</h1>
+<form action="" method="POST" name="register">
+    {{form.hidden_tag()}}
+    <p>Please register</p>
+    <p>nickname : {{form.nickname(size=16)}}</p>
+    <p>username : {{form.username(size=16)}}</p>
+    <p>password : {{form.password(size=16)}}</p>
+    <p>password2: {{form.password2(size=16)}}</p>
+    <p>Email    : {{form.email(size=16)}}</p>
+    {% for error in form.username.errors %}
+        <span style="color: red;">username:[{{error}}]</span>
+    {% endfor %}
+    {% for error in form.nickname.errors %}
+        <span style="color: red;">nickname:[{{error}}]</span>
+    {% endfor %}
+    {% for error in form.password.errors %}
+        <span style="color: red;">password:[{{error}}]</span>
+    {% endfor %}
+    {% for error in form.email.errors %}
+        <span style="color: red;">email:[{{error}}]</span>
+    {% endfor %}
+
+    <p><input type="submit" value="Register"></p>
+</form>
+{% endblock content%}

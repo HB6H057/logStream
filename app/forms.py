@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms import ValidationError
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Regexp, Length, EqualTo
+from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
 from app.models import User
 
 
@@ -10,7 +10,6 @@ class LoginForm(Form):
     password = PasswordField('password', validators=[DataRequired()])
     remember = BooleanField('remember', default=False)
     submit   = SubmitField('Log In')
-
 
 class RegistrationForm(Form):
     username = StringField('username',
@@ -23,7 +22,10 @@ class RegistrationForm(Form):
                                          EqualTo('password2',
                                                   message='Password must match.')])
     password2 = PasswordField('comfirm password', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Length(1, 64),
+                                             Email()])
     nickname = StringField('nickname', validators=[DataRequired()])
+
     submit = SubmitField('register')
 
     def validate_email(self, field):
@@ -31,5 +33,5 @@ class RegistrationForm(Form):
             raise ValidationError('Email alreay registered.')
 
     def validate_username(self, field):
-        if User.query.filter_by(field.data).first():
+        if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')

@@ -3,12 +3,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
-    __tablename__ == 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64))
-    username = db.Column(db.String(64), index=True, unique=True)
+    id            = db.Column(db.Integer, primary_key=True)
+    email         = db.Column(db.String(120), index=True, unique=True)
+    nickname      = db.Column(db.String(64))
+    username      = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    email = db.Column(db.String(120), index=True, unique=True)
 
     @property
     def password(self):
@@ -23,7 +22,7 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        "GlaDOS: \"(User: %s)That was genuinely mildly impressive.\""
+        return '<User %r>' % self.username
 
 
 @login_manager.user_loader
