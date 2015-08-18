@@ -9,5 +9,6 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'manage.login'
+login_manager.init_app(app)
 
 from app import views, models
