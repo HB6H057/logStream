@@ -1,4 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>this is a default page</h1>
+{% if current_user.is_authenticated() %}
+<form action="" method="POST" name="post">
+  {{ form.hidden_tag() }}
+  <p>Please enter your username and password: </p>
+  <p>{{ form.body }}</p>
+  {% if form.body.errors %}
+      <span style="color: red;">GlaDOS: "You are kidding me."</span>
+  {% endif %}
+  <p><input type="submit" value="Submit"></p>
+</form>
+{% endif %}
+<hr />
+{% for post in posts%}
+{{ post.author.username }}:
+{{ post.body }}<br />
+{{ post.timestamp }}
+<hr />
+{% endfor %}
 {% endblock %}

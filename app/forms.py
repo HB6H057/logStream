@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms import ValidationError
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
 from app.models import User
 
@@ -34,3 +34,7 @@ class RegistrationForm(Form):
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')
+
+class PostForm(Form):
+    body = TextAreaField("What's on your mind?", validators=[DataRequired()])
+    submit = SubmitField('Submit')

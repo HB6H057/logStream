@@ -1,15 +1,28 @@
 from flask import render_template, flash, redirect, url_for
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user, login_required, current_user
 from app import app, db
-from app.models import User
-from app.forms import LoginForm, RegistrationForm
+from app.models import User, Post
+from app.forms import LoginForm, RegistrationForm, PostForm
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     title    = 'logStream'
     subtitle = 'The cake is a lie!!'
-    return render_template('index.html', title=title, subtitle=subtitle)
+    form     = PostForm()
+    if form.validate_on_submit():
+        if current_user.is_authenticated() is False:
+            flash('no login no BB')
+            return redirect(url_for('index'))
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        flash('post a new post success')
+        return redirect(url_for('index'))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', title=title, subtitle=subtitle,
+                            form=form, posts=posts)
 
 
 @app.route('/manage/login', methods=['GET', 'POST'])
