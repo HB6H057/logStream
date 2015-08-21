@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+{% for post in tag.posts %}
+{{ post.user_id }}:
+{{ post.body }}<br />
+{% for t in post.tags %}
+{{ t.mame }}
+{% endfor %}
+<hr />
+{% endfor %}
+{% endblock content %}

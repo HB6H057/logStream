@@ -14,6 +14,6 @@ build
 # My configurations:
 db.ini
 deploy_key_rsa
-/app.db
-/db_repository/
-/flask/
+/*.db
+/db_repository/*
+/flask/*

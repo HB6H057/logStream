@@ -1,7 +1,10 @@
+import pdb
+
 from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app import app, db
-from app.models import User, Post
+from app.models import User, Post, Tag
+from app.models import post_new
 from app.forms import LoginForm, RegistrationForm, PostForm
 
 
@@ -14,10 +17,14 @@ def index():
         if current_user.is_authenticated() is False:
             flash('no login no BB')
             return redirect(url_for('index'))
-        post = Post(body=form.body.data,
-                    author=current_user._get_current_object())
-        db.session.add(post)
-        db.session.commit()
+        tags = map(lambda x:x.strip(' '), form.tags.data.split(','))
+        tags = list(set(tags))
+        if '' in tags:
+            tags.remove('')
+
+        post_new(body=form.body.data, user=current_user._get_current_object(), tagnames=tags)
+
+        pdb.set_trace()
         flash('post a new post success')
         return redirect(url_for('index'))
     posts = Post.query.order_by(Post.timestamp.desc()).all()
@@ -57,3 +64,8 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+@app.route('/tag/<tag_slug>')
+def tags(tag_slug):
+    tag = Tag.query.filter(Tag.slug == tag_slug).first()
+    return render_template('tag.html', tag=tag)

@@ -37,4 +37,5 @@ class RegistrationForm(Form):
 
 class PostForm(Form):
     body = TextAreaField("What's on your mind?", validators=[DataRequired()])
+    tags = StringField('tags')
     submit = SubmitField('Submit')

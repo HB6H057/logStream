@@ -9,14 +9,40 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+post_tags_table = db.Table('post_tags',
+            db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
+            db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
+            )
+
+
 class Post(db.Model):
     id        = db.Column(db.Integer, primary_key=True)
     body      = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id   = db.Column(db.Integer, db.ForeignKey('user.id'))
+    tags      = db.relationship('Tag', secondary=post_tags_table,
+                                backref=db.backref('posts', lazy='dynamic'),
+                                )
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
+
+
+class Tag(db.Model):
+    id    = db.Column(db.Integer, primary_key=True)
+    name  = db.Column(db.String(64), index=True, unique=True)
+    slug  = db.Column(db.String(64), index=True, unique=True)
+
+    def __init__(self, name, slug):
+            self.name = name
+            self.slug = slug
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class User(UserMixin, db.Model):
@@ -25,7 +51,7 @@ class User(UserMixin, db.Model):
     nickname      = db.Column(db.String(64))
     username      = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    posts         = db.relationship('Post', backref='author', lazy='dynamic')
+    posts         = db.relationship('Post', backref='user', lazy='dynamic')
 
     @property
     def password(self):
@@ -41,3 +67,19 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.nickname
+
+def _add_tag(name):
+    slug = name.lower().replace(' ', '-')
+    tag  = db.session.query(Tag).filter(Tag.slug==slug).first()
+    if not tag:
+        tag = Tag(name, slug)
+        tag.save()
+    return tag
+
+def post_new(user, body, tagnames=[]):
+    post = Post(body=body, user=user)
+    for tagname in tagnames:
+        tag = _add_tag(tagname)
+        post.tags.append(tag)
+    post.save()
+    return post
