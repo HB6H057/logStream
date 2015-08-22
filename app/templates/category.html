@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}
+<title>{{ cate.name }}</title>
+{% endblock title %}
+
+{% block content %}
+Category:{{ cate.name }}<br />
+  {% for post in cate.posts %}
+    {{ post.user_id }}:{{ post.body }}
+    <hr />
+  {% endfor %}
+{% endblock %}

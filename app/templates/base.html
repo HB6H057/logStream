@@ -1,10 +1,8 @@
 <html>
     <head>
-        {% if title %}
+        {% block title %}
         <title>{{title}} › {{subtitle}}</title>
-        {% else %}
-        <title>Manager Login</title>
-        {% endif %}
+        {% endblock title %}
     </head>
     <body>
       <div>nav:<a href="{{ url_for('index') }}">Home</a>

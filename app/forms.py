@@ -1,8 +1,12 @@
 from flask.ext.wtf import Form
 from wtforms import ValidationError
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
-from app.models import User
+from app.models import User, Category
+
+def categories():
+    return Category.query.all()
 
 
 class LoginForm(Form):
@@ -35,7 +39,13 @@ class RegistrationForm(Form):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')
 
+# how to implement drop-down select lists
+# http://wtforms.readthedocs.org/en/1.0.4/ext.html#wtforms.ext.sqlalchemy.fields.QuerySelectField
+# http://stackoverflow.com/questions/17887519/how-to-use-queryselectfield-in-flask
+# http://stackoverflow.com/questions/17307351/adding-fk-queryselectfield-to-wtform-generated-by-model-form
 class PostForm(Form):
-    body = TextAreaField("What's on your mind?", validators=[DataRequired()])
-    tags = StringField('tags')
+    body            = TextAreaField("What's on your mind?", validators=[DataRequired()])
+    tags            = StringField('tags')
+    select_category = QuerySelectField(query_factory=categories, get_label='name')
+    # add_category    = StringField('add category')
     submit = SubmitField('Submit')

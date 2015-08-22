@@ -14,6 +14,11 @@ post_tags_table = db.Table('post_tags',
             db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
             )
 
+category_posts_table = db.Table('category_tag',
+            db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+            db.Column('category_id', db.Integer, db.ForeignKey('category.id'))
+            )
+
 
 class Post(db.Model):
     id        = db.Column(db.Integer, primary_key=True)
@@ -67,6 +72,19 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.nickname
+
+class Category(db.Model):
+    id   = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    slug = db.Column(db.String(63), index=True, unique=True)
+    posts = db.relationship('Post', secondary=category_posts_table,
+                            backref=db.backref('cates', lazy='dynamic'),
+                            )
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
 
 def _add_tag(name):
     slug = name.lower().replace(' ', '-')

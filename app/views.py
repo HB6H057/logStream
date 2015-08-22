@@ -17,6 +17,7 @@ def index():
         if current_user.is_authenticated() is False:
             flash('no login no BB')
             return redirect(url_for('index'))
+            
         tags = map(lambda x:x.strip(' '), form.tags.data.split(','))
         tags = list(set(tags))
         if '' in tags:
@@ -69,3 +70,8 @@ def logout():
 def tags(tag_slug):
     tag = Tag.query.filter(Tag.slug == tag_slug).first()
     return render_template('tag.html', tag=tag)
+
+@app.route('/category/<cate_slug>')
+def category(cate_slug):
+    cate = Category.query.filter(Category.slug == cate_slug).first()
+    return render_template('category.html', cate=cate)
