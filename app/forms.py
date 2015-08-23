@@ -34,7 +34,7 @@ class RegistrationForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email alreay registered.')
-
+j
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')
@@ -47,5 +47,4 @@ class PostForm(Form):
     body            = TextAreaField("What's on your mind?", validators=[DataRequired()])
     tags            = StringField('tags')
     select_category = QuerySelectField(query_factory=categories, get_label='name')
-    # add_category    = StringField('add category')
     submit = SubmitField('Submit')

@@ -94,10 +94,13 @@ def _add_tag(name):
         tag.save()
     return tag
 
-def post_new(user, body, tagnames=[]):
-    post = Post(body=body, user=user)
+# test: a post a categroy 
+def post_new(user, body, tagnames=[], catenames):
+    post = Post(body=body, user=user, cates=cates)
     for tagname in tagnames:
         tag = _add_tag(tagname)
         post.tags.append(tag)
+    cates = db.session.query(Category).filter(Category.name==catenames)
+    post.cates.append(cates)
     post.save()
     return post

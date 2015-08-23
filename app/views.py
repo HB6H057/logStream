@@ -17,7 +17,7 @@ def index():
         if current_user.is_authenticated() is False:
             flash('no login no BB')
             return redirect(url_for('index'))
-            
+
         tags = map(lambda x:x.strip(' '), form.tags.data.split(','))
         tags = list(set(tags))
         if '' in tags:
