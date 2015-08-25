@@ -1,3 +1,4 @@
+from re
 from app import db, login_manager
 from datetime import datetime
 from flask.ext.login import UserMixin
@@ -87,14 +88,15 @@ class Category(db.Model):
 
 
 def _add_tag(name):
-    slug = name.lower().replace(' ', '-')
+    rule=re.compile(r'[^a-zA-z\-]')
+    slug = re.sub(rule, '', name.lower().replace(' ', '-'))
     tag  = db.session.query(Tag).filter(Tag.slug==slug).first()
     if not tag:
         tag = Tag(name, slug)
         tag.save()
     return tag
 
-# test: a post a categroy 
+# test: a post a categroy
 def post_new(user, body, tagnames=[], catenames):
     post = Post(body=body, user=user, cates=cates)
     for tagname in tagnames:

@@ -15,6 +15,7 @@ class LoginForm(Form):
     remember = BooleanField('remember', default=False)
     submit   = SubmitField('Log In')
 
+
 class RegistrationForm(Form):
     username = StringField('username',
                            validators=[DataRequired(), Length(1, 64),
@@ -34,7 +35,7 @@ class RegistrationForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email alreay registered.')
-j
+
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')
