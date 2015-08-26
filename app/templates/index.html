@@ -3,7 +3,8 @@
 {% if current_user.is_authenticated() %}
 <form action="" method="POST" name="post">
   {{ form.hidden_tag() }}
-  <p>Please enter your username and password: </p>
+  <p>{{ form.title }}</p>
+  <p>http://127.0.0.1:5000/M/{{ form.slug }}.html</p>
   <p>{{ form.body }}</p>
   {% if form.body.errors %}
       <span style="color: red;">GlaDOS: "You are kidding me."</span>

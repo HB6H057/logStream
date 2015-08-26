@@ -24,6 +24,8 @@ category_posts_table = db.Table('category_tag',
 
 class Post(db.Model):
     id        = db.Column(db.Integer, primary_key=True)
+    title     = db.Column(db.String(120))
+    slug      = db.Column(db.String(120))
     body      = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id   = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -99,11 +101,11 @@ def _add_tag(name):
     return tag
 
 # test: a post a categroy
-def post_new(user, body, cates, tagnames=[]):
+def post_new(user, title, slug, body, cates, tagnames=[]):
     cates = db.session.query(Category).filter(Category.slug==cates.slug).first()
     # if cates is None......
-    pdb.set_trace()
-    post = Post(body=body, user=user)
+    # pdb.set_trace()
+    post = Post(title=title, slug=slug, body=body, user=user)
     post.cates.append(cates)
     for tagname in tagnames:
         tag = _add_tag(tagname)

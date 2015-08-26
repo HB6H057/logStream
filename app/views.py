@@ -23,10 +23,11 @@ def index():
         if '' in tags:
             tags.remove('')
 
-        post_new(body=form.body.data, user=current_user._get_current_object(), tagnames=tags,
-                 cates=form.select_category.data)
+        post_new(body=form.body.data, user=current_user._get_current_object(),
+                 tagnames=tags, cates=form.select_category.data,
+                 title=form.title.data, slug=form.slug.data)
 
-        pdb.set_trace()
+        # pdb.set_trace()
         flash('post a new post success')
         return redirect(url_for('index'))
     posts = Post.query.order_by(Post.timestamp.desc()).all()

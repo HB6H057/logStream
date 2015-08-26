@@ -1,4 +1,4 @@
-<h1><a href="#">post title</a><br /></h1>
+<h1><a href="/M/{{ post.slug }}.html">{{ post.title }}</a><br /></h1>
 <p>Category: {% for cate in post.cates %}<a href="/category/{{ cate.slug }}">{{ cate.name }}</a>{%endfor%}</p>
 <p>{{ post.body }}</p>
 <ul>

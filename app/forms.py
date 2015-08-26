@@ -45,6 +45,8 @@ class RegistrationForm(Form):
 # http://stackoverflow.com/questions/17887519/how-to-use-queryselectfield-in-flask
 # http://stackoverflow.com/questions/17307351/adding-fk-queryselectfield-to-wtform-generated-by-model-form
 class PostForm(Form):
+    title           = StringField('title')
+    slug            = StringField('slug')
     body            = TextAreaField("What's on your mind?", validators=[DataRequired()])
     tags            = StringField('tags')
     select_category = QuerySelectField(query_factory=categories, get_label='name')
