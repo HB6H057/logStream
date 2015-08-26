@@ -1,11 +1,8 @@
 {% extends "base.html" %}
+{% block title %}Tag: {{ tag.name }}{% endblock title %}
 {% block content %}
-{% for post in tag.posts %}
-{{ post.user_id }}:
-{{ post.body }}<br />
-{% for t in post.tags %}
-{{ t.mame }}
-{% endfor %}
-<hr />
-{% endfor %}
+<h1>all <a href="/tag/{{ tag.slug }}">{{ tag.name }}</a> tag posts</h1><br />
+  {% for post in tag.posts %}
+    {% include "posts.html" %}
+  {% endfor %}
 {% endblock content %}

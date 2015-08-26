@@ -1,0 +1,9 @@
+<h1><a href="#">post title</a><br /></h1>
+<p>Category: {% for cate in post.cates %}<a href="/category/{{ cate.slug }}">{{ cate.name }}</a>{%endfor%}</p>
+<p>{{ post.body }}</p>
+<ul>
+{% for tag in post.tags %}
+<li><a href="/tag/{{ tag.slug }}">{{ tag.name }}</li>
+{% endfor %}
+</ul>
+<hr />

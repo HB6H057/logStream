@@ -15,9 +15,6 @@
 {% endif %}
 <hr />
 {% for post in posts%}
-{{ post.user.username }}:
-{{ post.body }}<br />
-{{ post.timestamp }}
-<hr />
+{% include "posts.html" %}
 {% endfor %}
 {% endblock %}
