@@ -1,4 +1,5 @@
-from re
+import re
+import pdb
 from app import db, login_manager
 from datetime import datetime
 from flask.ext.login import UserMixin
@@ -86,7 +87,8 @@ class Category(db.Model):
         db.session.add(self)
         db.session.commit()
 
-
+# 1.Tags are separated by commas.
+# 2.Slug must be lowercase and must not contain letters and '-' character outside
 def _add_tag(name):
     rule=re.compile(r'[^a-zA-z\-]')
     slug = re.sub(rule, '', name.lower().replace(' ', '-'))
@@ -97,12 +99,25 @@ def _add_tag(name):
     return tag
 
 # test: a post a categroy
-def post_new(user, body, tagnames=[], catenames):
-    post = Post(body=body, user=user, cates=cates)
+def post_new(user, body, cates, tagnames=[]):
+    cates = db.session.query(Category).filter(Category.slug==cates.slug).first()
+    # if cates is None......
+    pdb.set_trace()
+    post = Post(body=body, user=user)
+    post.cates.append(cates)
     for tagname in tagnames:
         tag = _add_tag(tagname)
         post.tags.append(tag)
-    cates = db.session.query(Category).filter(Category.name==catenames)
     post.cates.append(cates)
     post.save()
     return post
+
+
+def _add_category(name):
+    rule=re.compile(r'[^a-zA-z\-]')
+    slug = re.sub(rule, '', name.lower().replace(' ', '-'))
+    cate  = db.session.query(Categroy).filter(Category.slug==slug).first()
+    if not cate:
+        cate = Categroy(name, slug)
+        cate.save()
+    return Categroy

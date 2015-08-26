@@ -3,7 +3,7 @@ import pdb
 from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app import app, db
-from app.models import User, Post, Tag
+from app.models import User, Post, Tag, Category
 from app.models import post_new
 from app.forms import LoginForm, RegistrationForm, PostForm
 
@@ -23,7 +23,8 @@ def index():
         if '' in tags:
             tags.remove('')
 
-        post_new(body=form.body.data, user=current_user._get_current_object(), tagnames=tags, cates)
+        post_new(body=form.body.data, user=current_user._get_current_object(), tagnames=tags,
+                 cates=form.select_category.data)
 
         pdb.set_trace()
         flash('post a new post success')
