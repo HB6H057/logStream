@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %} 分类集合 {% endblock title %}
+
+{% block content %}
+<hr />
+{% for cate in cates %}
+  <a href="/category/{{ cate.slug }}">{{ cate.name }}</a> &nbsp;&nbsp;&nbsp;
+{% endfor %}
+{% endblock content %}

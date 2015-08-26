@@ -82,3 +82,8 @@ def all_tags():
 def category(cate_slug):
     cate = Category.query.filter(Category.slug == cate_slug).first()
     return render_template('category.html', cate=cate)
+
+@app.route('/category')
+def all_cates():
+    cates = Category.query.all()
+    return render_template('categorys.html', cates=cates)

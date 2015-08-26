@@ -3,8 +3,8 @@
         <title>{% block title %} {{title}} › {{subtitle}} {% endblock title %}</title>
     </head>
     <body>
-      <div>nav:<a href="{{ url_for('index') }}">Home</a>
-         | Hello! {% if current_user.is_authenticated() %}
+      <div> {% include "nav.html" %}
+        <br />Hello! {% if current_user.is_authenticated() %}
         {{ current_user.nickname }}, you can <a href="{{ url_for('logout') }}">logout</a>
         {% else %}
         Strange, you can <a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a>
