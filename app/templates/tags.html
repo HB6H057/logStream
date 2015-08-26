@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}标签集合{% endblock title %}
+{% block content %}
+<hr />
+{%for tag in tags%}
+<a href="/tag/{{ tag.slug }}">{{ tag.name }}</a>&nbsp;&nbsp;&nbsp;
+{%endfor%}
+{% endblock %}
