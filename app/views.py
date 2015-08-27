@@ -68,6 +68,25 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('index'))
 
+@app.route('/manage/post/delete/<int:pid>', methods=['GET', 'POST'])
+@login_required
+def delete_post(pid):
+    post = Post.query.filter(Post.id==pid).first()
+
+    for tag in post.tags:
+        tag.posts.remove(post)
+
+    for cate in post.cates:
+        cate.posts.remove(post)
+        
+    pdb.set_trace()
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('delete post success!')
+    return redirect(url_for('index'))
+
+
 @app.route('/tag/<tag_slug>')
 def tags(tag_slug):
     tag = Tag.query.filter(Tag.slug == tag_slug).first()
