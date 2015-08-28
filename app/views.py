@@ -12,27 +12,10 @@ from app.forms import LoginForm, RegistrationForm, PostForm
 def index():
     title    = 'logStream'
     subtitle = 'The cake is a lie!!'
-    form     = PostForm()
-    if form.validate_on_submit():
-        if current_user.is_authenticated() is False:
-            flash('no login no BB')
-            return redirect(url_for('index'))
 
-        tags = map(lambda x:x.strip(' '), form.tags.data.split(','))
-        tags = list(set(tags))
-        if '' in tags:
-            tags.remove('')
-
-        post_new(body=form.body.data, user=current_user._get_current_object(),
-                 tagnames=tags, cates=form.select_category.data,
-                 title=form.title.data, slug=form.slug.data)
-
-        # pdb.set_trace()
-        flash('post a new post success')
-        return redirect(url_for('index'))
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('index.html', title=title, subtitle=subtitle,
-                            form=form, posts=posts)
+                                         posts=posts)
 
 
 @app.route('/manage/login', methods=['GET', 'POST'])
@@ -68,9 +51,33 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('index'))
 
-@app.route('/manage/post/delete/<int:pid>', methods=['GET', 'POST'])
+@app.route('/manage/post/new', methods=['GET', 'POST'])
+@login_required
+def post_new():
+    form = PostForm()
+    if form.validate_on_submit():
+        if current_user.is_authenticated() is False:
+            flash('no login no BB')
+            return redirect(url_for('index'))
+
+        tags = map(lambda x:x.strip(' '), form.tags.data.split(','))
+        tags = list(set(tags))
+        if '' in tags:
+            tags.remove('')
+
+        post_new(body=form.body.data, user=current_user._get_current_object(),
+                 tagnames=tags, cates=form.select_category.data,
+                 title=form.title.data, slug=form.slug.data)
+
+        # pdb.set_trace()
+        flash('post a new post success')
+        return redirect(url_for('index'))
+    return render_template('post_new.html', form=form)
+
+@app.route('/manage/post/delete/<int:pid>', methods=['GET'])
 @login_required
 def delete_post(pid):
+    request.args.get()
     post = Post.query.filter(Post.id==pid).first()
 
     for tag in post.tags:
@@ -78,7 +85,7 @@ def delete_post(pid):
 
     for cate in post.cates:
         cate.posts.remove(post)
-        
+
     pdb.set_trace()
     db.session.delete(post)
     db.session.commit()

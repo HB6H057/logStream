@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}发表一篇新文章{% endblock title %}
+{% block content %}
+{% if current_user.is_authenticated() %}
+<form action="" method="POST" name="post">
+  {{ form.hidden_tag() }}
+  <p>标题: {{ form.title }}</p>
+  <p>固定连接: http://127.0.0.1:5000/M/{{ form.slug }}.html</p>
+  <p>{{ form.body }}</p>
+  {% if form.body.errors %}
+      <span style="color: red;">GlaDOS: "You are kidding me."</span>
+  {% endif %}
+  <p>Tags:{{ form.tags }}</p>
+  <p>Category:{{ form.select_category }}</p>
+  <p><input type="submit" value="Submit"></p>
+</form>
+{% endif %}
+{% endblock content %}
+{% block script %}
+  {{ super() }}
+  <script src="/static/js/admin.js"></script>
+{% block script %}
