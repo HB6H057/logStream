@@ -84,6 +84,15 @@ class Category(db.Model):
     posts = db.relationship('Post', secondary=category_posts_table,
                             backref=db.backref('cates', lazy='dynamic'),
                             )
+    @staticmethod
+    def add_category(name):
+        rule=re.compile(r'[^a-zA-z\-]')
+        slug = re.sub(rule, '', name.lower().replace(' ', '-'))
+        cate  = db.session.query(Category).filter(Category.slug==slug).first()
+        if not cate:
+            category = Category(name=name, slug=slug)
+            category.save()
+        return category
 
     def save(self):
         db.session.add(self)
@@ -113,13 +122,3 @@ def post_new(user, title, slug, body, cates, tagnames=[]):
     post.cates.append(cates)
     post.save()
     return post
-
-
-def _add_category(name):
-    rule=re.compile(r'[^a-zA-z\-]')
-    slug = re.sub(rule, '', name.lower().replace(' ', '-'))
-    cate  = db.session.query(Categroy).filter(Category.slug==slug).first()
-    if not cate:
-        cate = Categroy(name, slug)
-        cate.save()
-    return Categroy

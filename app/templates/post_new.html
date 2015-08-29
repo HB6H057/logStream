@@ -12,11 +12,12 @@
   {% endif %}
   <p>Tags:{{ form.tags }}</p>
   <p>Category:{{ form.select_category }}</p>
-  <p><input type="submit" value="Submit"></p>
+  <p>new Category:{{ form.add_category(class="newCategoryName") }} <a class="addCategoryBtn" href="#">Add</a></p>
+  <input type="submit" value="Submit">
 </form>
 {% endif %}
 {% endblock content %}
 {% block script %}
   {{ super() }}
   <script src="/static/js/admin.js"></script>
-{% block script %}
+{% endblock script %}

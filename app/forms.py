@@ -49,5 +49,6 @@ class PostForm(Form):
     slug            = StringField('slug')
     body            = TextAreaField("What's on your mind?", validators=[DataRequired()])
     tags            = StringField('tags')
+    add_category    = StringField('newCategory')
     select_category = QuerySelectField(query_factory=categories, get_label='name')
     submit = SubmitField('Submit')

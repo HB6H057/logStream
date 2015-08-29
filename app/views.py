@@ -1,6 +1,6 @@
 import pdb
 
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.models import User, Post, Tag, Category
@@ -50,6 +50,19 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+@app.route('/manage/category/get', methods=['POST'])
+@login_required
+def get_category():
+    cate_name = request.form.get('category')
+    print '++++++++--------------+++++++++'
+    print cate_name
+    Category.add_category(cate_name)
+    # flash('add category success !')
+    return {
+        'success': True
+    }
+    # return redirect(url_for('post_new'))
 
 @app.route('/manage/post/new', methods=['GET', 'POST'])
 @login_required
