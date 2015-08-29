@@ -11,7 +11,7 @@
       <span style="color: red;">GlaDOS: "You are kidding me."</span>
   {% endif %}
   <p>Tags:{{ form.tags }}</p>
-  <p>Category:{{ form.select_category }}</p>
+  <p>Category:<span class="selCategory">{{ form.select_category() }}</span></p>
   <p>new Category:{{ form.add_category(class="newCategoryName") }} <a class="addCategoryBtn" href="#">Add</a></p>
   <input type="submit" value="Submit">
 </form>

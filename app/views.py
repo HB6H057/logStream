@@ -34,7 +34,7 @@ def login():
 
 @app.route('/manage/register', methods=['GET', 'POST'])
 def register():
-    Form = RegistrationForm()
+    form = RegistrationForm()
     if Form.validate_on_submit():
         user = User(email=Form.email.data, username=Form.username.data,
                     password=Form.password.data, nickname=Form.nickname.data)
@@ -42,7 +42,7 @@ def register():
         db.session.commit()
         flash('You can login Now !')
         return redirect(url_for('index'))
-    return render_template('register.html', form=Form)
+    return render_template('register.html', form=form)
 
 @app.route('/manage/logout')
 @login_required
@@ -55,11 +55,13 @@ def logout():
 @login_required
 def get_category():
     cate_name = request.form.get('category')
-    print '++++++++--------------+++++++++'
-    print cate_name
-    Category.add_category(cate_name)
-    return jsonify(success=True)
-    # return redirect(url_for('post_new'))
+    if cate_name is None:
+        return jsonify(success=False, html=None)
+    cate = Category.add_category(cate_name)
+    form = PostForm(select_category=cate)
+    html = render_template('select_category.htm', form=form)
+    # pdb.set_trace()
+    return jsonify(success=True, html=html)
 
 @app.route('/manage/post/new', methods=['GET', 'POST'])
 @login_required

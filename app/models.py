@@ -86,7 +86,7 @@ class Category(db.Model):
                             )
     @staticmethod
     def add_category(name):
-        rule=re.compile(r'[^a-zA-z\-]')
+        rule=re.compile(r'[^a-zA-z0-9\-]')
         slug = re.sub(rule, '', name.lower().replace(' ', '-'))
         cate  = db.session.query(Category).filter(Category.slug==slug).first()
         if not cate:
@@ -101,7 +101,7 @@ class Category(db.Model):
 # 1.Tags are separated by commas.
 # 2.Slug must be lowercase and must not contain letters and '-' character outside
 def _add_tag(name):
-    rule=re.compile(r'[^a-zA-z\-]')
+    rule=re.compile(r'[^a-zA-z0-9\-]')
     slug = re.sub(rule, '', name.lower().replace(' ', '-'))
     tag  = db.session.query(Tag).filter(Tag.slug==slug).first()
     if not tag:
