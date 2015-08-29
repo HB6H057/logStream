@@ -90,9 +90,9 @@ class Category(db.Model):
         slug = re.sub(rule, '', name.lower().replace(' ', '-'))
         cate  = db.session.query(Category).filter(Category.slug==slug).first()
         if not cate:
-            category = Category(name=name, slug=slug)
-            category.save()
-        return category
+            cate = Category(name=name, slug=slug)
+            cate.save()
+        return cate
 
     def save(self):
         db.session.add(self)
