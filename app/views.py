@@ -89,7 +89,6 @@ def post_new():
 @app.route('/manage/post/delete/<int:pid>', methods=['GET'])
 @login_required
 def delete_post(pid):
-    request.args.get()
     post = Post.query.filter(Post.id==pid).first()
 
     for tag in post.tags:
