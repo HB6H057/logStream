@@ -97,7 +97,6 @@ def delete_post(pid):
     for cate in post.cates:
         cate.posts.remove(post)
 
-    pdb.set_trace()
     db.session.delete(post)
     db.session.commit()
 

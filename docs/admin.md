@@ -48,7 +48,7 @@
 
 ## 标签
 ### 添加标签
-- URL:
+- URL: /manage/tag/get
 - Method: POST
 
 #### Request
