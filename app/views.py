@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.models import User, Post, Tag, Category
-from app.models import post_new
+from app.models import new_post
 from app.forms import LoginForm, RegistrationForm, PostForm
 
 
@@ -34,7 +34,7 @@ def login():
 
 @app.route('/manage/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm()
+    Form = RegistrationForm()
     if Form.validate_on_submit():
         user = User(email=Form.email.data, username=Form.username.data,
                     password=Form.password.data, nickname=Form.nickname.data)
@@ -42,7 +42,7 @@ def register():
         db.session.commit()
         flash('You can login Now !')
         return redirect(url_for('index'))
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=Form)
 
 @app.route('/manage/logout')
 @login_required
@@ -77,7 +77,7 @@ def post_new():
         if '' in tags:
             tags.remove('')
 
-        post_new(body=form.body.data, user=current_user._get_current_object(),
+        new_post(body=form.body.data, user=current_user._get_current_object(),
                  tagnames=tags, cates=form.select_category.data,
                  title=form.title.data, slug=form.slug.data)
 

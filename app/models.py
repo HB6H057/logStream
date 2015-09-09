@@ -110,7 +110,7 @@ def _add_tag(name):
     return tag
 
 # test: a post a categroy
-def post_new(user, title, slug, body, cates, tagnames=[]):
+def new_post(user, title, slug, body, cates, tagnames=[]):
     cates = db.session.query(Category).filter(Category.slug==cates.slug).first()
     # if cates is None......
     # pdb.set_trace()
