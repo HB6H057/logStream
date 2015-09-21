@@ -10,6 +10,9 @@ from app.forms import LoginForm, RegistrationForm, PostForm
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """
+        Index page
+    """
     title    = 'logStream'
     subtitle = 'The cake is a lie!!'
 
@@ -20,6 +23,9 @@ def index():
 
 @app.route('/manage/login', methods=['GET', 'POST'])
 def login():
+    """
+        Sgin_In page
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -34,6 +40,9 @@ def login():
 
 @app.route('/manage/register', methods=['GET', 'POST'])
 def register():
+    """
+        Sign_Up  page
+    """
     Form = RegistrationForm()
     if Form.validate_on_submit():
         user = User(email=Form.email.data, username=Form.username.data,
@@ -47,21 +56,12 @@ def register():
 @app.route('/manage/logout')
 @login_required
 def logout():
+    """
+        Logout
+    """
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('index'))
-
-@app.route('/manage/category/get', methods=['POST'])
-@login_required
-def get_category():
-    cate_name = request.form.get('category')
-    if cate_name is None:
-        return jsonify(success=False, html=None)
-    cate = Category.add_category(cate_name)
-    form = PostForm(select_category=cate)
-    html = render_template('select_category.htm', form=form)
-    # pdb.set_trace()
-    return jsonify(success=True, html=html)
 
 @app.route('/manage/post/new', methods=['GET', 'POST'])
 @login_required
@@ -81,7 +81,6 @@ def post_new():
                  tagnames=tags, cates=form.select_category.data,
                  title=form.title.data, slug=form.slug.data)
 
-        # pdb.set_trace()
         flash('post a new post success')
         return redirect(url_for('index'))
     return render_template('post_new.html', form=form)
@@ -124,3 +123,19 @@ def category(cate_slug):
 def all_cates():
     cates = Category.query.all()
     return render_template('categorys.html', cates=cates)
+
+@app.route('/manage/category/get', methods=['POST'])
+@login_required
+def get_category():
+    cate_name = request.form.get('category')
+    if cate_name is None:
+        return jsonify(success=False, html=None)
+    cate = Category.add_category(cate_name)
+    form = PostForm(select_category=cate)
+    html = render_template('select_category.htm', form=form)
+    # pdb.set_trace()
+    return jsonify(success=True, html=html)
+
+@app.route('/M/<post_slug>')
+def post_detail():
+    pass

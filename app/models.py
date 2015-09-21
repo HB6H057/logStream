@@ -4,6 +4,7 @@ from app import db, login_manager
 from datetime import datetime
 from flask.ext.login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from xpinyin import Pinyin
 
 
 @login_manager.user_loader
@@ -86,8 +87,7 @@ class Category(db.Model):
                             )
     @staticmethod
     def add_category(name):
-        rule=re.compile(r'[^a-zA-z0-9\-]')
-        slug = re.sub(rule, '', name.lower().replace(' ', '-'))
+        slug = name2slug(name)
         cate  = db.session.query(Category).filter(Category.slug==slug).first()
         if not cate:
             cate = Category(name=name, slug=slug)
@@ -101,8 +101,7 @@ class Category(db.Model):
 # 1.Tags are separated by commas.
 # 2.Slug must be lowercase and must not contain letters and '-' character outside
 def _add_tag(name):
-    rule=re.compile(r'[^a-zA-z0-9\-]')
-    slug = re.sub(rule, '', name.lower().replace(' ', '-'))
+    slug = name2slug(name);
     tag  = db.session.query(Tag).filter(Tag.slug==slug).first()
     if not tag:
         tag = Tag(name, slug)
@@ -122,3 +121,19 @@ def new_post(user, title, slug, body, cates, tagnames=[]):
     post.cates.append(cates)
     post.save()
     return post
+
+def name2slug(name):
+    '''
+        1. chinese to pinyin.
+        2. to lower.
+        3. remove special character. (except: '-',' ')
+        4. to convert ' ' into '-'
+        5. fix special case of slug.
+            I.  multi '-', eg: 'GlaDOS's block' ---> 'gladoss--blog'
+            II. ...
+    '''
+    name = Pinyin().get_pinyin(name)
+    pattern = re.compile(r'[^a-zA-z0-9\-]')
+    slug = re.sub(pattern, '', name.lower().replace(' ', '-'))
+    slug = re.sub('-+', '-', slug)
+    return slug
