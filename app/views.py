@@ -17,6 +17,7 @@ def index():
     subtitle = 'The cake is a lie!!'
 
     posts = Post.query.order_by(Post.timestamp.desc()).all()
+    # pdb.set_trace()
     return render_template('index.html', title=title, subtitle=subtitle,
                                          posts=posts)
 
