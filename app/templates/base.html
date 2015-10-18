@@ -5,9 +5,9 @@
     <body>
       <div> {% include "nav.html" %}
         <br />Hello! {% if current_user.is_authenticated %}
-        {{ current_user.nickname }}, you can <a href="{{ url_for('logout') }}">logout</a>
+        {{ current_user.nickname }}, you can <a href="{{ url_for('user.logout') }}">logout</a>
         {% else %}
-        Strange, you can <a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a>
+        Strange, you can <a href="{{ url_for('user.login') }}">Login</a> or <a href="{{ url_for('user.register') }}">Register</a>
         {% endif %}
       </div>
         {%with messages = get_flashed_messages()%}

@@ -3,7 +3,7 @@ from wtforms import ValidationError
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
-from app.models import User, Category
+from app.core.models import User, Category
 
 def categories():
     return Category.query.all()

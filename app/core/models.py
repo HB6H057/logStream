@@ -1,16 +1,13 @@
-import re
 import pdb
-from app import db, login_manager
+import re
 from datetime import datetime
+
+from xpinyin import Pinyin
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from xpinyin import Pinyin
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
+db = SQLAlchemy()
 
 post_tags_table = db.Table('post_tags',
             db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
