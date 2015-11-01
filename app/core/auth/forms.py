@@ -1,8 +1,5 @@
-import pdb
-
 from wtforms import ValidationError
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
 
 from flask.ext.wtf import Form
@@ -10,28 +7,11 @@ from flask.ext.wtf import Form
 from app.core.models import User, Category
 from app import db
 
-def categories():
-    return Category.query.all()
-
-
-class LoginForm(Form):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
-    remember = BooleanField('remember', default=False)
-
-    def get_user(self):
-        user = db.session.query(User).filter_by(username=self.username.data).first()
-        self.validate_user(user)
-        return user
-
-    def validate_user(self, user):
-        if user is None:
-            raise validators.ValidationError('Invalid user')
-        if not user.verify_password(self.password.data):
-            raise validators.ValidationError('Invalid password')
-
 
 class RegForm(Form):
+    """
+    Register form
+    """
     username = StringField('username',
                            validators=[DataRequired(), Length(1, 64),
                                        Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
@@ -46,6 +26,9 @@ class RegForm(Form):
     nickname = StringField('nickname', validators=[DataRequired()])
 
     def reg_user(self):
+        """
+        Register a new user use form.data.
+        """
         self.validate_email(self.email)
         self.validate_username(self.username)
         user = User(email=self.email.data, username=self.username.data,
@@ -61,16 +44,3 @@ class RegForm(Form):
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('usernae alreay registered.')
-
-# how to implement drop-down select lists
-# http://wtforms.readthedocs.org/en/1.0.4/ext.html#wtforms.ext.sqlalchemy.fields.QuerySelectField
-# http://stackoverflow.com/questions/17887519/how-to-use-queryselectfield-in-flask
-# http://stackoverflow.com/questions/17307351/adding-fk-queryselectfield-to-wtform-generated-by-model-form
-class PostForm(Form):
-    title           = StringField('title')
-    slug            = StringField('slug')
-    body            = TextAreaField("What's on your mind?", validators=[DataRequired()])
-    tags            = StringField('tags')
-    add_category    = StringField('newCategory')
-    select_category = QuerySelectField(query_factory=categories, get_label='name')
-    submit = SubmitField('Submit')

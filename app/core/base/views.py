@@ -32,7 +32,7 @@ def tags(tslug):
     Renders a page for a list of post by tag
     :params tslug: slug to look up posts by tag
     """
-    tag = Tag.query.filter(Tag.slug == tag_slug).first()
+    tag = Tag.query.filter(Tag.slug == tslug).first()
     return render_template('tag.html', tag=tag)
 
 @base.route('/tag')
@@ -50,7 +50,7 @@ def category(cslug):
     Renders a page for a list of post by category
     params: cslug: slug to look up posts by category
     """
-    cate = Category.query.filter(Category.slug == cate_slug).first()
+    cate = Category.query.filter(Category.slug == cslug).first()
     return render_template('category.html', cate=cate)
 
 @base.route('/category')

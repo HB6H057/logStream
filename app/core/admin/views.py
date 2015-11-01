@@ -7,7 +7,7 @@ from flask.ext.admin import expose, helpers, AdminIndexView
 from flask.ext.login import current_user, login_user, logout_user
 from app.core.models import User, UserInfo, Tag, Post, Category
 
-from app.core.forms import LoginForm, RegForm
+from .forms import LoginForm
 
 
 class AdminIndexView(AdminIndexView):

@@ -7,7 +7,7 @@
         <br />Hello! {% if current_user.is_authenticated %}
         {{ current_user.nickname }}, you can <a href="{{ url_for('admin.logout') }}">logout</a>
         {% else %}
-        Strange, you can <a href="{{ url_for('admin.login') }}">Login</a> or <a href="{{ url_for('user.register') }}">Register</a>
+        Strange, you can <a href="{{ url_for('admin.login') }}">Login</a> or <a href="{{ url_for('auth.register') }}">Register</a>
         {% endif %}
       </div>
         {%with messages = get_flashed_messages()%}

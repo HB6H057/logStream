@@ -17,8 +17,10 @@ def create_app():
 def init_blueprint(app):
     from app.core.base import base
     app.register_blueprint(base)
-    from app.core.user import user
-    app.register_blueprint(user)
+    from app.core.auth import auth
+    app.register_blueprint(auth)
+    from app.core.api import api
+    app.register_blueprint(api)
 
 def init_db(app):
     db.init_app(app)
