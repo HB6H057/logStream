@@ -1,9 +1,14 @@
-from flask.ext.wtf import Form
+import pdb
+
 from wtforms import ValidationError
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo, Email
+
+from flask.ext.wtf import Form
+
 from app.core.models import User, Category
+from app import db
 
 def categories():
     return Category.query.all()
@@ -13,10 +18,20 @@ class LoginForm(Form):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     remember = BooleanField('remember', default=False)
-    submit   = SubmitField('Log In')
+
+    def get_user(self):
+        user = db.session.query(User).filter_by(username=self.username.data).first()
+        self.validate_user(user)
+        return user
+
+    def validate_user(self, user):
+        if user is None:
+            raise validators.ValidationError('Invalid user')
+        if not user.verify_password(self.password.data):
+            raise validators.ValidationError('Invalid password')
 
 
-class RegistrationForm(Form):
+class RegForm(Form):
     username = StringField('username',
                            validators=[DataRequired(), Length(1, 64),
                                        Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
@@ -30,7 +45,14 @@ class RegistrationForm(Form):
                                              Email()])
     nickname = StringField('nickname', validators=[DataRequired()])
 
-    submit = SubmitField('register')
+    def reg_user(self):
+        self.validate_email(self.email)
+        self.validate_username(self.username)
+        user = User(email=self.email.data, username=self.username.data,
+                    password=self.password.data, nickname=self.nickname.data)
+        db.session.add(user)
+        db.session.commit()
+        return user
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():

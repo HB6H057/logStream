@@ -2,6 +2,7 @@ from flask import Flask
 from flask.ext.login import LoginManager
 
 from app.core.models import db
+from app.core.admin import create_admin
 
 def create_app():
     app = Flask(__name__)
@@ -9,6 +10,7 @@ def create_app():
     init_db(app)
     init_login(app)
     init_blueprint(app)
+    create_admin(app, db)
 
     return app
 
